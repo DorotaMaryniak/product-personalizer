@@ -5,11 +5,16 @@ import {useState} from 'react';
 
 const Product = props => {
   const [currentColor, setCurrentColor]= useState(props.colors[0]);
-  const [currentSize, setCurrentSize] = useState(props.sizes[0].name);
+  const [currentSize, setCurrentSize] = useState(props.sizes[0]);
 
   const prepareColorClassName = color => {
     return styles['color' + color[0].toUpperCase() + color.substr(1).toLowerCase()];
   };
+
+  const getPrice = (basePrice, currentSize) => {
+    return basePrice + currentSize.additionalPrice;
+  }
+
 
   return (
     <article className={styles.product}>
@@ -22,13 +27,13 @@ const Product = props => {
       <div>
         <header>
           <h2 className={styles.name}>{props.title}</h2>
-          <span className={styles.price}>Price: {props.basePrice}$</span>
+          <span className={styles.price}>Price: {getPrice(props.basePrice, currentSize)}$</span>
         </header>
         <form>
           <div className={styles.sizes}>
             <h3 className={styles.optionLabel}>Sizes</h3>
             <ul className={styles.choices}>
-              {props.sizes.map(size => <li><button type="button" onClick = {() =>setCurrentSize(size)} className={clsx(size.name===currentSize&&styles.active)}>{size.name}</button></li>)}
+              {props.sizes.map(size => <li><button type="button" onClick = {() =>setCurrentSize(size)} className={clsx(size===currentSize&&styles.active)}>{size.name}</button></li>)}
             </ul>
           </div>
           <div className={styles.colors}>
