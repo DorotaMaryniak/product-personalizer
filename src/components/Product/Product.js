@@ -2,6 +2,7 @@ import styles from './Product.module.scss';
 import {useState} from 'react';
 import ProductImage from '../ProductImage/ProductImage';
 import ProductForm from '../ProductForm/ProductForm';
+import PropTypes from 'prop-types';
 
 const Product = props => {
   const [currentColor, setCurrentColor]= useState(props.colors[0]);
@@ -30,5 +31,14 @@ const Product = props => {
 
   )
 };
+
+Product.propTypes = {
+  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  sizes: PropTypes.array.isRequired,
+  colors: PropTypes.array.isRequired,
+  basePrice: PropTypes.number.isRequired,
+};
+
 
 export default Product;
