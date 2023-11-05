@@ -1,10 +1,12 @@
-import clsx from 'clsx';
 import Button from '../Button/Button';
 import styles from './ProductForm.module.scss'
+import OptionSize from '../OptionSize/OptionSize';
+import OptionColor from '../OptionColor/OptionColor';
+import PropTypes from 'prop-types';
 
 const ProductForm = props =>{
 
-  const getPrice = (basePrice, currentSize) => {
+  const getPrice = (basePrice,currentSize) => {
     return basePrice + currentSize.additionalPrice;
   }
 
@@ -20,9 +22,6 @@ const ProductForm = props =>{
     props.setCurrentSize(props.sizes[0]);
   };
 
-  const prepareColorClassName = color => {
-    return styles['color' + color[0].toUpperCase() + color.substr(1).toLowerCase()];
-  };
 
   return(
   <div>
@@ -31,23 +30,29 @@ const ProductForm = props =>{
     <span className={styles.price}>Price: {getPrice(props.basePrice, props.currentSize)}$</span>
   </header>
   <form>
-    <div className={styles.sizes}>
-      <h3 className={styles.optionLabel}>Sizes</h3>
-      <ul className={styles.choices}>
-        {props.sizes.map(size => <li> <button type="button" onClick = {() =>props.setCurrentSize(size)} className={clsx(size===props.currentSize&&styles.active)}>{size.name}</button></li>)}
-      </ul>
-    </div>
-    <div className={styles.colors}>
-      <h3 className={styles.optionLabel}>Colors</h3>
-      <ul className={styles.choices}>
-        {props.colors.map(color => <li><button type="button" onClick ={() =>props.setCurrentColor(color)} className={clsx(prepareColorClassName(color), color===props.currentColor&&styles.active)} /></li>)}
-      </ul>
-    </div>
+    <OptionSize sizes={props.sizes}
+                currentSize={props.currentSize}
+                setCurrentSize={props.setCurrentSize}/>
+
+    <OptionColor  colors={props.colors}
+                  currentColor={props.currentColor}
+                  setCurrentColor={props.setCurrentColor}/>
+
     <Button onClick={ (event) => sentOrder(event, props.title, props.basePrice, props.currentSize, props.currentColor)} className={styles.button}>
-     <span className="fa fa-shopping-cart" />
+                     <span className="fa fa-shopping-cart" />
     </Button>
   </form>
 </div>
   )
 }
+ProductForm.propTypes = {
+    title: PropTypes.string.isRequired,
+    basePrice: PropTypes.number.isRequired,
+    colors: PropTypes.array.isRequired,
+    sizes: PropTypes.array.isRequired,
+    currentSize: PropTypes.object.isRequired,
+    currentColor: PropTypes.string.isRequired,
+    setCurrentSize: PropTypes.func.isRequired,
+    setCurrentColor: PropTypes.func.isRequired,
+  };
 export default ProductForm;
